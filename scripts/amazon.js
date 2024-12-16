@@ -1,4 +1,4 @@
-import { cart } from '../data/cart.js';
+import { cart, addToCart } from '../data/cart.js';
 import { products } from '../data/products.js';
 
 let productsHTML = '';
@@ -61,47 +61,30 @@ document.querySelector('.js-products-grid').innerHTML = productsHTML;
 
 const addedMessageTimeouts = {};
 
+function diaplayAddedToCartMessage(productId) {
+  const addedMessage = document.querySelector(`.js-added-to-cart-${productId}`);
+  const previousTimeoutId = addedMessageTimeouts[productId];
+  previousTimeoutId && clearTimeout(previousTimeoutId);
+  addedMessage.classList.add('added-to-cart-visible');
+  const timeoutId = setTimeout(() => {
+    addedMessage.classList.remove('added-to-cart-visible');
+  }, 2000);
+  addedMessageTimeouts[productId] = timeoutId;
+}
+
+function updateCartQuantity() {
+  let cartQuantity = 0;
+  cart.forEach((cartItem) => {
+    cartQuantity += cartItem.quantity;
+  });
+  document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
+}
+
 document.querySelectorAll('.js-add-to-cart').forEach((button) => {
   button.addEventListener('click', () => {
     const { productId } = button.dataset;
-
-    let quantity = Number(
-      document.querySelector(`.js-quantity-selector-${productId}`).value,
-    );
-
-    const addedMessage = document.querySelector(
-      `.js-added-to-cart-${productId}`,
-    );
-    addedMessage.classList.add('added-to-cart-visible');
-
-    const previousTimeoutId = addedMessageTimeouts[productId];
-
-    previousTimeoutId && clearTimeout(previousTimeoutId);
-
-    const timeoutId = setTimeout(() => {
-      addedMessage.classList.remove('added-to-cart-visible');
-    }, 2000);
-
-    addedMessageTimeouts[productId] = timeoutId;
-
-    let matchingItem;
-    cart.forEach((item) => {
-      if (productId === item.productId) matchingItem = item;
-    });
-
-    matchingItem
-      ? (matchingItem.quantity += quantity)
-      : cart.push({
-          productId,
-          quantity,
-        });
-
-    let cartQuantity = 0;
-
-    cart.forEach((item) => {
-      cartQuantity += item.quantity;
-    });
-
-    document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
+    addToCart(productId);
+    diaplayAddedToCartMessage(productId);
+    updateCartQuantity();
   });
 });
