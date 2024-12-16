@@ -5,7 +5,7 @@ import { fromatCurrency } from './utils/money.js';
 let cartSummaryHTML = '';
 
 cart.forEach((cartItem) => {
-  const productId = cartItem.id;
+  const { productId } = cartItem;
 
   let matchingProduct;
 

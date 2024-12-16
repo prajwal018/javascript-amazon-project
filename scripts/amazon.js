@@ -60,6 +60,8 @@ products.forEach((product) => {
 });
 document.querySelector('.js-products-grid').innerHTML = productsHTML;
 
+updateCartQuantity();
+
 const addedMessageTimeouts = {};
 
 function diaplayAddedToCartMessage(productId) {
