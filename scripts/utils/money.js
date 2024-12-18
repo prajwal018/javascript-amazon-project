@@ -1,3 +1,3 @@
-export function fromatCurrency(priceCents) {
+export default function fromatCurrency(priceCents) {
   return (priceCents / 100).toFixed(2);
 }
