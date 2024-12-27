@@ -7,12 +7,13 @@ import {
 } from '../../data/cart.js';
 import { getProduct, products } from '../../data/products.js';
 import {
+  calulateDeliveryDate,
   deliveryOptions,
   getDeliveryOptions,
 } from '../../data/deliveryOptions.js';
 import { fromatCurrency } from '../utils/money.js';
-import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import { renderPaymentSummary } from './paymentSummary.js';
+import { renderCheckoutHeader } from './checkoutHeader.js';
 
 export function renderOrderSummary() {
   let cartSummaryHTML = '';
@@ -26,9 +27,7 @@ export function renderOrderSummary() {
 
     const deliveryOption = getDeliveryOptions(deliveryOptionId);
 
-    const today = dayjs();
-    const deliveryDate = today.add(deliveryOption.deliveryDays, 'days');
-    const dateString = deliveryDate.format('dddd, MMMM D');
+    const dateString = calulateDeliveryDate(deliveryOption);
 
     cartSummaryHTML += `
   <div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
@@ -81,14 +80,11 @@ export function renderOrderSummary() {
   </div>
   `;
   });
-  updateCartQuantity();
 
   function deliveryOptionsHTML(matchingProduct, cartItem) {
     let html = '';
     deliveryOptions.forEach((deliveryOption) => {
-      const today = dayjs();
-      const deliveryDate = today.add(deliveryOption.deliveryDays, 'days');
-      const dateString = deliveryDate.format('dddd, MMMM D');
+      const dateString = calulateDeliveryDate(deliveryOption);
       const priceString =
         deliveryOption.priceCents === 0
           ? 'FREE '
@@ -117,20 +113,15 @@ export function renderOrderSummary() {
     return html;
   }
 
-  function updateCartQuantity() {
-    let cartQuantity = calculateCartQuantity();
-    document.querySelector(
-      '.js-return-to-home-link',
-    ).innerHTML = `${cartQuantity} items`;
-  }
-
   document.querySelector('.js-order-summary').innerHTML = cartSummaryHTML;
 
   document.querySelectorAll('.js-delete-link').forEach((link) => {
     link.addEventListener('click', () => {
       const { productId } = link.dataset;
       removeFromCart(productId);
-      updateCartQuantity();
+
+      renderCheckoutHeader();
+      renderOrderSummary();
       renderPaymentSummary();
 
       document.querySelector(`.js-cart-item-container-${productId}`).remove();
@@ -161,7 +152,9 @@ export function renderOrderSummary() {
       }
       updateQuantity(productId, quantity);
 
-      updateCartQuantity();
+      renderCheckoutHeader();
+      renderOrderSummary();
+      renderPaymentSummary();
 
       quantity === 0
         ? document
