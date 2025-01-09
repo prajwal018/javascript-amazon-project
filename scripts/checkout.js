@@ -7,11 +7,7 @@ import { loadCart } from '../data/cart.js';
 // import '../data/backend-practice.js';
 
 Promise.all([
-	new Promise(resolve => {
-		loadProducts(() => {
-			resolve();
-		});
-	}),
+	loadProducts(),
 	new Promise(resolve => {
 		loadCart(() => {
 			resolve();
