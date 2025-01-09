@@ -1,7 +1,7 @@
 import { cart, removeFromCart, calculateCartQuantity, updateQuantity, updateDeliveryOption } from '../../data/cart.js';
 import { getProduct, products } from '../../data/products.js';
 import { calulateDeliveryDate, deliveryOptions, getDeliveryOptions } from '../../data/deliveryOptions.js';
-import { fromatCurrency } from '../utils/money.js';
+import { formatCurrency } from '../utils/money.js';
 import { renderPaymentSummary } from './paymentSummary.js';
 import { renderCheckoutHeader } from './checkoutHeader.js';
 
@@ -63,7 +63,7 @@ export function renderOrderSummary() {
 		let html = '';
 		deliveryOptions.forEach(deliveryOption => {
 			const dateString = calulateDeliveryDate(deliveryOption);
-			const priceString = deliveryOption.priceCents === 0 ? 'FREE ' : `$${fromatCurrency(deliveryOption.priceCents)} -`;
+			const priceString = deliveryOption.priceCents === 0 ? 'FREE ' : `$${formatCurrency(deliveryOption.priceCents)} -`;
 
 			const isChecked = deliveryOption.id === cartItem.deliveryOptionId;
 
