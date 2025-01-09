@@ -5,7 +5,11 @@ import { loadProducts } from '../data/products.js';
 // import '../data/car.js';
 // import '../data/backend-practice.js';
 
-loadProducts(() => {
+new Promise(resolve => {
+	loadProducts(() => {
+		resolve();
+	});
+}).then(() => {
 	renderCheckoutHeader();
 	renderOrderSummary();
 	renderPaymentSummary();
