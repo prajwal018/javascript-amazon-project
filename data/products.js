@@ -74,8 +74,8 @@ export let products = [];
 export function loadProducts() {
 	const promise = fetch('https://supersimplebackend.dev/products')
 		.then(response => response.json())
-		.then(data => {
-			products = data.map(productDetails => {
+		.then(productData => {
+			products = productData.map(productDetails => {
 				if (productDetails.type === 'clothing') {
 					return new Clothing(productDetails);
 				} else if (productDetails.type === 'appliance') {
@@ -84,29 +84,35 @@ export function loadProducts() {
 				return new Product(productDetails);
 			});
 			console.log('load product');
+		})
+		.catch(error => {
+			console.error('Unexpected error. Please try again later.', error);
 		});
 	return promise;
 }
-// export function loadProducts(func) {
-// 	const xhr = new XMLHttpRequest();
-// 	xhr.addEventListener('load', () => {
-// 		products = JSON.parse(xhr.response).map(productDetails => {
-// 			if (productDetails.type === 'clothing') {
-// 				return new Clothing(productDetails);
-// 			} else if (productDetails.type === 'appliance') {
-// 				return new Appliance(productDetails);
-// 			}
-// 			return new Product(productDetails);
-// 		});
-
-// 		func();
-// 		console.log('load product');
-// 	});
-// 	xhr.open('GET', 'https://supersimplebackend.dev/products');
-// 	xhr.send();
-// }
 
 /*
+export function oldLoadProducts() {
+	const xhr = new XMLHttpRequest();
+	xhr.addEventListener('load', () => {
+		products = JSON.parse(xhr.response).map(productDetails => {
+			if (productDetails.type === 'clothing') {
+				return new Clothing(productDetails);
+			} else if (productDetails.type === 'appliance') {
+				return new Appliance(productDetails);
+			}
+			return new Product(productDetails);
+		});
+
+		console.log('load product');
+	});
+
+	xhr.addEventListener('error', error => {
+		console.error('Unexpected error. Please try again later.', error);
+	});
+	xhr.open('GET', 'https://supersimplebackend.dev/products');
+	xhr.send();
+}
 export const products = [
 	{
 		id: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6',
