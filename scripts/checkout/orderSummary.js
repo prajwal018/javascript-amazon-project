@@ -1,5 +1,5 @@
 import { cart, removeFromCart, calculateCartQuantity, updateQuantity, updateDeliveryOption } from '../../data/cart.js';
-import { getProduct, products } from '../../data/products.js';
+import { getProduct } from '../../data/products.js';
 import { calulateDeliveryDate, deliveryOptions, getDeliveryOptions } from '../../data/deliveryOptions.js';
 import { formatCurrency } from '../utils/money.js';
 import { renderPaymentSummary } from './paymentSummary.js';
@@ -9,9 +9,11 @@ export function renderOrderSummary() {
 	let cartSummaryHTML = '';
 
 	cart.forEach(cartItem => {
-		const { productId } = cartItem;
+		const productId = cartItem.productId;
+		console.log(productId);
 
 		const matchingProduct = getProduct(productId);
+		
 
 		const deliveryOptionId = cartItem.deliveryOptionId;
 
@@ -20,7 +22,7 @@ export function renderOrderSummary() {
 		const dateString = calulateDeliveryDate(deliveryOption);
 
 		cartSummaryHTML += `
-  <div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
+  <div class="cart-item-container js-cart-item-container js-cart-item-container-${matchingProduct.id}">
     <div class="delivery-date js-delivery-date">Delivery date: ${dateString}</div>
 
     <div class="cart-item-details-grid">
@@ -88,7 +90,7 @@ export function renderOrderSummary() {
 
 	document.querySelectorAll('.js-delete-link').forEach(link => {
 		link.addEventListener('click', () => {
-			const { productId } = link.dataset;
+			const productId = link.dataset.productId;
 			removeFromCart(productId);
 
 			renderCheckoutHeader();

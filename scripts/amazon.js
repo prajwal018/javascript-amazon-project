@@ -1,10 +1,13 @@
-import { cart, addToCart, calculateCartQuantity } from '../data/cart.js';
-import { products, loadProducts } from '../data/products.js';
+import { addToCart, calculateCartQuantity } from '../data/cart.js';
+import { loadProducts, products } from '../data/products.js';
 
-loadProducts(renderProductGrid);
+renderProductGrid();
 
-function renderProductGrid() {
+async function renderProductGrid() {
+	await loadProducts();
+
 	let productsHTML = '';
+
 	products.forEach(product => {
 		productsHTML += `
   <div class="product-container">
@@ -58,12 +61,12 @@ function renderProductGrid() {
         </div>
   `;
 	});
-	document.querySelector('.js-products-grid').innerHTML = productsHTML;
 
-	updateCartQuantity();
+	document.querySelector('.js-products-grid').innerHTML = productsHTML;
 
 	const addedMessageTimeouts = {};
 
+  // display added to cart message
 	function diaplayAddedToCartMessage(productId) {
 		const addedMessage = document.querySelector(`.js-added-to-cart-${productId}`);
 		const previousTimeoutId = addedMessageTimeouts[productId];
@@ -75,11 +78,15 @@ function renderProductGrid() {
 		addedMessageTimeouts[productId] = timeoutId;
 	}
 
+  // update cart quantity on cart icon
 	function updateCartQuantity() {
 		let cartQuantity = calculateCartQuantity();
 		document.querySelector('.js-cart-quantity').innerHTML = cartQuantity > 0 ? cartQuantity : '';
 	}
+	updateCartQuantity();
 
+
+  // add event listener to add to cart button
 	document.querySelectorAll('.js-add-to-cart').forEach(button => {
 		button.addEventListener('click', () => {
 			const { productId } = button.dataset;
