@@ -41,7 +41,7 @@ export function renderOrderSummary() {
           </span>
           <input class="quantity-input js-quantity-input-${matchingProduct.id}"/>
           <span data-product-id='${matchingProduct.id}'class="save-quantity-link link-primary js-save-link">Save</span>
-          <span data-product-id='${matchingProduct.id}' class="delete-quantity-link link-primary js-delete-link">
+          <span data-product-id='${matchingProduct.id}' class="delete-quantity-link link-primary delete-link js-delete-link js-delete-link-${matchingProduct.id}">
             Delete
           </span>
         </div>
@@ -90,12 +90,11 @@ export function renderOrderSummary() {
 		link.addEventListener('click', () => {
 			const productId = link.dataset.productId;
 			removeFromCart(productId);
-
+			const container = document.querySelector(`.js-cart-item-container-${productId}`);
+			container.remove();
 			renderCheckoutHeader();
 			renderOrderSummary();
 			renderPaymentSummary();
-
-			document.querySelector(`.js-cart-item-container-${productId}`).remove();
 		});
 	});
 

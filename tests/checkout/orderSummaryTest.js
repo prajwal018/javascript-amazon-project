@@ -16,6 +16,7 @@ describe('test suite: renderOrderSummary', () => {
 		spyOn(localStorage, 'setItem');
 
 		document.querySelector('.js-test-container').innerHTML = `
+			<div class="js-checkout-header-middle-section"></div>
       <div class="js-order-summary"></div>
       <div class="js-payment-summary"></div>
     `;
@@ -41,8 +42,8 @@ describe('test suite: renderOrderSummary', () => {
 
 	it('displays the cart', () => {
 		expect(document.querySelectorAll('.js-cart-item-container').length).toEqual(2);
-		expect(document.querySelector(`.js-product-quantity-${productId1}`).innerText).toContain('Quantity: 2');
-		expect(document.querySelector(`.js-product-quantity-${productId2}`).innerText).toContain('Quantity: 1');
+		expect(document.querySelector(`.js-quantity-label-${productId1}`).innerText).toEqual('2');
+		expect(document.querySelector(`.js-quantity-label-${productId2}`).innerText).toEqual('1');
 
 		document.querySelector('.js-test-container').innerHTML = '';
 	});

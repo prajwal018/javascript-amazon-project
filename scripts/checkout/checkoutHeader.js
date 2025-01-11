@@ -2,6 +2,7 @@ import { calculateCartQuantity } from '../../data/cart.js';
 
 export function renderCheckoutHeader() {
   let cartQuantity = calculateCartQuantity();
+  
 
   const checkoutHeaderHTML = `
   Checkout (<a
@@ -10,7 +11,6 @@ export function renderCheckoutHeader() {
           > ${cartQuantity} items</a
           >)
   `;
-
   document.querySelector('.js-checkout-header-middle-section').innerHTML =
     checkoutHeaderHTML;
 }
