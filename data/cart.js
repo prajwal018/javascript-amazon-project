@@ -84,7 +84,7 @@ export function updateDeliveryOption(productId, deliveryOptionId) {
 export function loadCart(func) {
 	const xhr = new XMLHttpRequest();
 	xhr.addEventListener('load', () => {
-		console.log(xhr.response);
+		// console.log(xhr.response);
 		func();
 	});
 	xhr.open('GET', 'https://supersimplebackend.dev/cart');

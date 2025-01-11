@@ -83,7 +83,6 @@ export async function loadProducts() {
 			}
 			return new Product(productDetails);
 		});
-		console.log('load product');
 	} catch (error) {
 		console.error('Unexpected error. Please try again later.', error);
 	}
