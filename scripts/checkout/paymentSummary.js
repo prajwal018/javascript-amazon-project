@@ -2,7 +2,7 @@ import { cart } from '../../data/cart.js';
 import { getDeliveryOptions } from '../../data/deliveryOptions.js';
 import { getProduct } from '../../data/products.js';
 import { formatCurrency } from '../utils/money.js';
-import { addOrder } from '../../data/orders.js';
+import { addOrder } from '../../data/order.js';
 
 export function renderPaymentSummary() {
 	let productPriceCents = 0;
@@ -77,7 +77,7 @@ export function renderPaymentSummary() {
 				}),
 			});
 			const order = await response.json();
-			addOrder(order);
+			await addOrder(order);
 		} catch (error) {
 			console.error('Error placing order, Try again later');
 		}
