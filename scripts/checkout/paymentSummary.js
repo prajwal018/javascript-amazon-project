@@ -1,4 +1,4 @@
-import { cart } from '../../data/cart.js';
+import { cart, emptyCart } from '../../data/cart.js';
 import { getDeliveryOptions } from '../../data/deliveryOptions.js';
 import { getProduct } from '../../data/products.js';
 import { formatCurrency } from '../utils/money.js';
@@ -78,6 +78,7 @@ export function renderPaymentSummary() {
 			});
 			const order = await response.json();
 			await addOrder(order);
+			await emptyCart();
 		} catch (error) {
 			console.error('Error placing order, Try again later');
 		}

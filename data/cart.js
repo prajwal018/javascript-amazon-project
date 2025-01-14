@@ -90,3 +90,8 @@ export async function loadCart() {
 		console.log('error' + error);
 	}
 }
+
+export async function emptyCart() {
+	cart = [];
+	saveToStorage();
+}
