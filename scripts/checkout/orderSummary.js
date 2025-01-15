@@ -5,8 +5,21 @@ import { formatCurrency } from '../utils/money.js';
 import { renderPaymentSummary } from './paymentSummary.js';
 import { renderCheckoutHeader } from './checkoutHeader.js';
 
-export function renderOrderSummary() {
+document.querySelector('.js-order-summary').innerHTML = '<div class="loader">Loading...</div>';
+
+document.addEventListener('DOMContentLoaded', () => {
+	renderOrderSummary().then(() => {
+		document.querySelector('.loader').style.display = 'none';
+	});
+});
+
+export async function renderOrderSummary() {
 	let cartSummaryHTML = '';
+
+	if (cart.length === 0) {
+		document.querySelector('.js-order-summary').innerHTML = '<div class="empty-cart">Empty Cart! <br>Add something to your cart.</div>';
+		return;
+	}
 
 	cart.forEach(cartItem => {
 		const productId = cartItem.productId;

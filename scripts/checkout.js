@@ -4,6 +4,8 @@ import { renderPaymentSummary } from './checkout/paymentSummary.js';
 import { loadProducts } from '../data/products.js';
 import { loadCart } from '../data/cart.js';
 
+
+
 async function loadPage() {
 	try {
 		// throw 'error1';
