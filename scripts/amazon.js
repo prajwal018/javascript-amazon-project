@@ -1,8 +1,15 @@
 import { addToCart, calculateCartQuantity } from '../data/cart.js';
 import { loadProducts, products } from '../data/products.js';
 
-loadPage();
+document.querySelector('.js-products-grid').innerHTML = '<div class="loader">Loading...</div>';
 
+document.addEventListener('DOMContentLoaded', () => {
+	loadPage().then(() => {
+		document.querySelector('.loader').style.display = 'none';
+	});
+});
+
+loadPage();
 async function loadPage() {
 	await loadProducts();
 
