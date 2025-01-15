@@ -91,7 +91,7 @@ export async function loadCart() {
 	}
 }
 
-export async function emptyCart() {
+export async function resetCart() {
 	cart = [];
 	saveToStorage();
 }
