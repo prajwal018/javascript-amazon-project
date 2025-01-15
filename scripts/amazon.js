@@ -1,14 +1,36 @@
 import { addToCart, calculateCartQuantity } from '../data/cart.js';
 import { loadProducts, products } from '../data/products.js';
 
-renderProductGrid();
+loadPage();
 
-async function renderProductGrid() {
+async function loadPage() {
 	await loadProducts();
 
 	let productsHTML = '';
 
-	products.forEach(product => {
+	const url = new URL(window.location.href);
+	const search = url.searchParams.get('search');
+
+	let filteredProducts = products;
+
+	// If a search exists in the URL prarmeters,
+	// filter the products that match the search.
+
+	if (search) {
+		filteredProducts = products.filter(product => {
+			let matchingKeyword = false;
+
+			product.keywords.forEach(keyword => {
+				if (keyword.toLowerCase().includes(search.toLowerCase())) {
+					matchingKeyword = true;
+				}
+			});
+
+			return matchingKeyword || product.name.toLowerCase().includes(search.toLowerCase());
+		});
+	}
+
+	filteredProducts.forEach(product => {
 		productsHTML += `
   <div class="product-container">
           <div class="product-image-container">
@@ -66,7 +88,7 @@ async function renderProductGrid() {
 
 	const addedMessageTimeouts = {};
 
-  // display added to cart message
+	// display added to cart message
 	function diaplayAddedToCartMessage(productId) {
 		const addedMessage = document.querySelector(`.js-added-to-cart-${productId}`);
 		const previousTimeoutId = addedMessageTimeouts[productId];
@@ -78,15 +100,27 @@ async function renderProductGrid() {
 		addedMessageTimeouts[productId] = timeoutId;
 	}
 
-  // update cart quantity on cart icon
+	// update cart quantity on cart icon
 	function updateCartQuantity() {
 		let cartQuantity = calculateCartQuantity();
 		document.querySelector('.js-cart-quantity').innerHTML = cartQuantity > 0 ? cartQuantity : '';
 	}
 	updateCartQuantity();
 
+	document.querySelector('.js-search-button').addEventListener('click', () => {
+		const search = document.querySelector('.js-search-bar').value;
+		window.location.href = `index.html?search=${search}`;
+	});
 
-  // add event listener to add to cart button
+	// Extra feature: searching by pressing "Enter" on the keyboard.
+	document.querySelector('.js-search-bar').addEventListener('keydown', event => {
+		if (event.key === 'Enter') {
+			const searchTerm = document.querySelector('.js-search-bar').value;
+			window.location.href = `index.html?search=${searchTerm}`;
+		}
+	});
+
+	// add event listener to add to cart button
 	document.querySelectorAll('.js-add-to-cart').forEach(button => {
 		button.addEventListener('click', () => {
 			const { productId } = button.dataset;
