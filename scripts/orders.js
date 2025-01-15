@@ -4,11 +4,22 @@ import { getProduct, loadProducts } from '../data/products.js';
 import { addToCart, calculateCartQuantity } from '../data/cart.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 
+document.querySelector('.js-order-grid').innerHTML = '<div class="loader">Loading...</div>';
+
+document.addEventListener('DOMContentLoaded', () => {
+	loadPage().then(() => {
+		document.querySelector('.loader').style.display = 'none';
+	});
+});
+
 export async function loadPage() {
 	await loadProducts();
 
 	let ordersHTML = '';
-
+	if (orders.length === 0) {
+		document.querySelector('.js-order-grid').innerHTML = '<div class="no-orders">You need to order something first.</div>';
+		return;
+	}
 	orders.forEach(order => {
 		const orderTimeString = dayjs(order.orderTime).format('MMMM D');
 
@@ -80,7 +91,7 @@ export async function loadPage() {
 		return productsListHTML;
 	}
 
-  document.querySelector('.js-search-button').addEventListener('click', () => {
+	document.querySelector('.js-search-button').addEventListener('click', () => {
 		const search = document.querySelector('.js-search-bar').value;
 		window.location.href = `index.html?search=${search}`;
 	});

@@ -2,6 +2,15 @@ import { getOrder } from '../data/order.js';
 import { getProduct, loadProducts } from '../data/products.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 
+
+document.querySelector('.js-order-tracking-container').innerHTML = '<div class="loader">Loading...</div>';
+
+document.addEventListener('DOMContentLoaded', () => {
+	loadPage().then(() => {
+		document.querySelector('.loader').style.display = 'none';
+	});
+});
+
 async function loadPage() {
 	await loadProducts();
 	const url = new URL(window.location.href);
